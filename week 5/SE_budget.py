@@ -1,35 +1,34 @@
 def budget(num_people):
-    return 10 * num_people + 55
+    food_cost = num_people * 10
+    room_rent = 55
+    return food_cost + room_rent
 
-filename = input("Enter file name: ")
-invited = []
-attending = []
-not_attending = []
-not_responded = []
+input_file = input("Enter input file name: ")
+output_file = input("Enter output file name: ")
 
-with open(filename, "r") as file:
-    for line in file:
+guest_list = {'+': 0, '-': 0, '?': 0}
+total_invited = 0
+with open(input_file) as f:
+    for line in f:
         line = line.strip()
-        if line.endswith("+"):
-            invited.append(line[:-1])
-            attending.append(line[:-1])
-        elif line.endswith("-"):
-            invited.append(line[:-1])
-            not_attending.append(line[:-1])
-        elif line.endswith("?"):
-            invited.append(line[:-1])
-            not_responded.append(line[:-1])
-        else:
-            invited.append(line)
+        if line:
+            symbol = line[-1]
+            if symbol in guest_list:
+                guest_list[symbol] += 1
+            total_invited += 1
 
-total_invited = len(invited)
-min_participants = len(attending)
-max_participants = len(invited) - len(not_attending)
+min_participants = guest_list['+']
+max_participants = total_invited - guest_list['-']
+
 min_budget = budget(min_participants)
 max_budget = budget(max_participants)
 
-print(f"A total of {total_invited} people have been invited")
-print(f"The minimum number of participants is {min_participants}")
-print(f"The maximum number of participants is {max_participants}")
-print(f"The minimum budget for the party is {min_budget} euros")
-print(f"The maximum budget for the party is {max_budget} euros")
+with open(output_file, 'w') as f:
+    f.write(f"A total of {total_invited} people have been invited\n")
+    f.write(f"The minimum number of participants is {min_participants}\n")
+    f.write(f"The maximum number of participants is {max_participants}\n")
+    f.write(f"The minimum budget for the party is {min_budget} euros\n")
+    f.write(f"The maximum budget for the party is {max_budget} euros\n")
+
+print("Data written to file.")
+
