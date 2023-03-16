@@ -10,25 +10,30 @@ if analysis_type == "tags":
     for char in content:
         if char == "<":
             inside_tag = True
+            result += char
         elif char == ">":
-            result += char + "\n"
             inside_tag = False
+            result += char + "\n"
         elif inside_tag:
             result += char
 else:
     result = ""
     inside_tag = False
+    current_text = ""
     for char in content:
         if char == "<":
             inside_tag = True
+            if current_text.strip():
+                result += current_text.strip() + "\n"
+                current_text = ""
         elif char == ">":
             inside_tag = False
         elif not inside_tag:
-            result += char
-    result = result.split("\n")
-    result = "\n".join(line.strip() for line in result if line.strip())
+            current_text += char
+    if current_text.strip():
+        result += current_text.strip() + "\n"
 
-output_file = f"analysis-{analysis_type}.txt"
+output_file = input("Enter output file name: ")
 with open(output_file, "w") as f:
     f.write(result)
 
