@@ -1,7 +1,8 @@
 #script still needs info from python scrip server_name, admin_name, admin_password
 ---
-- hosts: "{{ server_name }}"
-  become: true
+- name: Provision Ubuntu Server
+  hosts: "{{ server_name }}"
+  become: yes
   vars:
     admin_name: "{{ admin_name }}"
     admin_password: "{{ admin_password }}"
@@ -9,15 +10,14 @@
     - name: "Update apt cache"
       apt:
         update_cache: yes
-
     - name: "Install python-minimal"
       apt:
         name: python-minimal
         state: present
-
-    - name: "Install Ubuntu desktop"
+        
+    - name: "Install Ubuntu Server"
       apt:
-        name: ubuntu-desktop
+        name: ubuntu-server
         state: present
 
     - name: "Install GNOME"
