@@ -1,0 +1,45 @@
+#script still missing admin_password, admin_name, need to configure server_hostname_or_IP and cloud_module_name
+
+---
+- hosts: <server_hostname_or_IP>
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: Launch a new instance
+      <cloud_module_name>:
+        count: 1
+        instance_type: t2.micro
+        image: ami-0c55b159cbfafe1f0 # Ubuntu 20.04 LTS (HVM)
+        key_name: my_key
+        security_group: my_security_group
+      register: ec2
+
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ item.public_ip }}"
+        port: 22
+        timeout: 300
+      loop: "{{ ec2.instances }}"
+
+    - name: Install Ubuntu packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apache2
+        - mysql-server
+        - php
+
+    - name: Copy config files
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      loop:
+        - { src: 'config/apache2.conf', dest: '/etc/apache2/apache2.conf' }
+        - { src: 'config/php.ini', dest: '/etc/php/7.4/apache2/php.ini' }
+
+    - name: Start Apache
+      service:
+        name: apache2
+        state: started
