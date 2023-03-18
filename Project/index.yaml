@@ -1,45 +1,49 @@
-#script still missing admin_password, admin_name, need to configure server_hostname_or_IP and cloud_module_name
-
+#script still needs info from python scrip server_name, admin_name, admin_password
 ---
-- hosts: <server_hostname_or_IP>
-  gather_facts: no
-  become: yes
-
+- hosts: "{{ server_name }}"
+  become: true
+  vars:
+    admin_name: "{{ admin_name }}"
+    admin_password: "{{ admin_password }}"
   tasks:
-    - name: Launch a new instance
-      <cloud_module_name>:
-        count: 1
-        instance_type: t2.micro
-        image: ami-0c55b159cbfafe1f0 # Ubuntu 20.04 LTS (HVM)
-        key_name: my_key
-        security_group: my_security_group
-      register: ec2
-
-    - name: Wait for SSH to come up
-      wait_for:
-        host: "{{ item.public_ip }}"
-        port: 22
-        timeout: 300
-      loop: "{{ ec2.instances }}"
-
-    - name: Install Ubuntu packages
+    - name: "Update apt cache"
       apt:
-        name: "{{ item }}"
+        update_cache: yes
+
+    - name: "Install python-minimal"
+      apt:
+        name: python-minimal
         state: present
-      loop:
-        - apache2
-        - mysql-server
-        - php
 
-    - name: Copy config files
-      copy:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-      loop:
-        - { src: 'config/apache2.conf', dest: '/etc/apache2/apache2.conf' }
-        - { src: 'config/php.ini', dest: '/etc/php/7.4/apache2/php.ini' }
+    - name: "Install Ubuntu desktop"
+      apt:
+        name: ubuntu-desktop
+        state: present
 
-    - name: Start Apache
-      service:
-        name: apache2
+    - name: "Install GNOME"
+      apt:
+        name: gnome-shell
+        state: present
+
+    - name: "Install XRDP"
+      apt:
+        name: xrdp
+        state: present
+
+    - name: "Enable XRDP"
+      systemd:
+        name: xrdp
+        enabled: yes
         state: started
+
+    - name: "Set admin password for XRDP"
+      copy:
+        content: "gnome-session --session=ubuntu-2d\n"
+        dest: /etc/xrdp/startwm.sh
+      notify: restart xrdp
+
+  handlers:
+    - name: "restart xrdp"
+      systemd:
+        name: xrdp
+        state: restarted
