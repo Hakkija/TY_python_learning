@@ -1,0 +1,49 @@
+#script still needs info from python scrip server_name, admin_name, admin_password
+---
+- name: Install and configure Ubuntu Server
+  hosts: all
+  become: true
+  vars:
+    server_name: "{{ server_name }}"
+    server_ip: "{{ server_ip }}"
+    admin_name: "{{ admin_name }}"
+    admin_password: "{{ admin_password }}"
+  tasks:
+    - name: Add user and set password
+      user:
+        name: "{{ admin_name }}"
+        password: "{{ admin_password | password_hash('sha512') }}"
+        groups: sudo
+        shell: /bin/bash
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install SSH server
+      apt:
+        name: openssh-server
+        state: present
+
+    - name: Configure firewall
+      ufw:
+        rule: allow
+        port: ssh
+
+    - name: Install packages
+      apt:
+        name:
+          - vim
+          - curl
+          - git
+        state: present
+
+    - name: Set hostname
+      hostname:
+        name: "{{ server_name }}"
+
+    - name: Set hosts file
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ server_ip }} {{ server_name }}"
+        state: present
