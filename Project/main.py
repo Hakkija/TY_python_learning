@@ -13,7 +13,7 @@ def index():
         user_name = request.form['user_name']
         user_password = request.form['user_password']
 
-        cmd = f"ansible-playbook -i {server_ip}, playbook.yml --extra-vars 'admin_name={admin_name} admin_password={admin_password} user_name={user_name} user_password={user_password}'"
+        cmd = f"ansible-playbook -i {server_ip}, playbook.yml --extra-vars 'server_name={server_name} admin_name={admin_name} admin_password={admin_password} user_name={user_name} user_password={user_password}'"
 
         result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
