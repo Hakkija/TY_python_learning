@@ -1,0 +1,160 @@
+{
+    "all": {
+        "Funcs": {
+            "crypto/tls.(*ecdheRSAKeyAgreement).generateServerKeyExchange": {
+                "Params": [
+                    {
+                        "Name": "self",
+                        "DataType": "crypto/tls.ecdheRSAKeyAgreement*"
+                    },
+                    {
+                        "Name": "config",
+                        "DataType": "crypto/tls.Config*"
+                    },
+                    {
+                        "Name": "cert",
+                        "DataType": "crypto/tls.Certificate*"
+                    },
+                    {
+                        "Name": "clientHello",
+                        "DataType": "crypto/tls.clientHelloMsg*"
+                    },
+                    {
+                        "Name": "hello",
+                        "DataType": "crypto/tls.serverHelloMsg*"
+                    }
+                ]
+            },
+            "crypto/tls.(*ecdheRSAKeyAgreement).processClientKeyExchange": {
+                "Params": [
+                    {
+                        "Name": "self",
+                        "DataType": "crypto/tls.ecdheRSAKeyAgreement*"
+                    },
+                    {
+                        "Name": "config",
+                        "DataType": "crypto/tls.Config*"
+                    },
+                    {
+                        "Name": "cert",
+                        "DataType": "crypto/tls.Certificate*"
+                    },
+                    {
+                        "Name": "ckx",
+                        "DataType": "crypto/tls.clientKeyExchangeMsg*"
+                    },
+                    {
+                        "Name": "version",
+                        "DataType": "uint16"
+                    }
+                ]
+            },
+            "crypto/tls.rsaKeyAgreement.generateServerKeyExchange": {
+                "Params": [
+                    {
+                        "Name": "self",
+                        "DataType": "crypto/tls.rsaKeyAgreement"
+                    },
+                    {
+                        "Name": "config",
+                        "DataType": "crypto/tls.Config*"
+                    },
+                    {
+                        "Name": "cert",
+                        "DataType": "crypto/tls.Certificate*"
+                    },
+                    {
+                        "Name": "clientHello",
+                        "DataType": "crypto/tls.clientHelloMsg*"
+                    },
+                    {
+                        "Name": "hello",
+                        "DataType": "crypto/tls.serverHelloMsg*"
+                    }
+                ]
+            },
+            "crypto/tls.rsaKeyAgreement.processClientKeyExchange": {
+                "Params": [
+                    {
+                        "Name": "self",
+                        "DataType": "crypto/tls.rsaKeyAgreement"
+                    },
+                    {
+                        "Name": "config",
+                        "DataType": "crypto/tls.Config*"
+                    },
+                    {
+                        "Name": "cert",
+                        "DataType": "crypto/tls.Certificate*"
+                    },
+                    {
+                        "Name": "ckx",
+                        "DataType": "crypto/tls.clientKeyExchangeMsg*"
+                    },
+                    {
+                        "Name": "version",
+                        "DataType": "uint16"
+                    }
+                ]
+            }
+        },
+        "Structs": {
+            "fmt.fmt": {
+                "Fields": [
+                    {
+                        "Name": "intbuf",
+                        "DataType": "byte[65]"
+                    },
+                    {
+                        "Name": "buf",
+                        "DataType": "fmt.buffer*"
+                    },
+                    {
+                        "Name": "wid",
+                        "DataType": "int"
+                    },
+                    {
+                        "Name": "prec",
+                        "DataType": "int"
+                    },
+                    {
+                        "Name": "widPresent",
+                        "DataType": "bool"
+                    },
+                    {
+                        "Name": "precPresent",
+                        "DataType": "bool"
+                    },
+                    {
+                        "Name": "minus",
+                        "DataType": "bool"
+                    },
+                    {
+                        "Name": "plus",
+                        "DataType": "bool"
+                    },
+                    {
+                        "Name": "sharp",
+                        "DataType": "bool"
+                    },
+                    {
+                        "Name": "space",
+                        "DataType": "bool"
+                    },
+                    {
+                        "Name": "unicode",
+                        "DataType": "bool"
+                    },
+                    {
+                        "Name": "uniQuote",
+                        "DataType": "bool"
+                    },
+                    {
+                        "Name": "zero",
+                        "DataType": "bool"
+                    }
+                ]
+            }
+        }
+    }
+}

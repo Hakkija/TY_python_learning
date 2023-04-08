@@ -1,65 +1,57 @@
 import json
+import os
 
 
-def json_diff(a, b, path=None):
-    if path is None:
-        path = []
+def load_json_file(file_name):
+    with open(file_name, "r") as file:
+        return json.load(file)
 
+
+def save_json_file(file_name, json_data):
+    with open(file_name, "w") as file:
+        json.dump(json_data, file, indent=4)
+
+
+def json_diff(json1, json2):
     delta = {}
+    for key, value in json2.items():
+        if key not in json1:
+            delta[key] = value
+        elif isinstance(value, dict) and isinstance(json1[key], dict):
+            sub_delta = json_diff(json1[key], value)
+            if sub_delta:
+                delta[key] = sub_delta
+        elif value != json1[key]:
+            delta[key] = value
 
-    for key in b.keys():
-        if key not in a:
-            delta[tuple(path + [key])] = b[key]
-        else:
-            if isinstance(a[key], dict) and isinstance(b[key], dict):
-                sub_delta = json_diff(a[key], b[key], path + [key])
-                delta.update(sub_delta)
-            elif a[key] != b[key]:
-                delta[tuple(path + [key])] = b[key]
-
-    for key in a.keys():
-        if key not in b:
-            delta[tuple(path + [key])] = None
+    for key in json1.keys():
+        if key not in json2:
+            delta[key] = None
 
     return delta
 
 
-def apply_delta(a, delta):
-    result = a.copy()
-
-    for path, value in delta.items():
-        target = result
-        for key in path[:-1]:
-            target = target[key]
-
+def json_patch(json1, delta):
+    for key, value in delta.items():
         if value is None:
-            del target[path[-1]]
+            json1.pop(key, None)
+        elif key not in json1 or not isinstance(value, dict) or not isinstance(json1[key], dict):
+            json1[key] = value
         else:
-            target[path[-1]] = value
-
-    return result
+            json_patch(json1[key], value)
 
 
-# Testimine
-v1 = {
-    "k1": {
-        "k1": ["x1", "x2"],
-        "k2": ["x1", "x2"],
-        "k3": ["x1", "x2"]
-    }
-}
+print("Current working directory:", os.getcwd())
 
-v2 = {
-    "k1": {
-        "k1": ["x1", "x2"],
-        "k2": ["x1", "x2"],
-        "k3": ["x1", "x3"],
-        "k4": ["x1", "x1"]
-    }
-}
+v1 = load_json_file("go1.json")
+v2 = load_json_file("go1.0.1.json")
 
 delta = json_diff(v1, v2)
-print("Delta:", delta)
 
-v2_reconstructed = apply_delta(v1, delta)
-print("V2 taastatud:", v2_reconstructed)
+save_json_file("delta.json", delta)
+
+v2_reconstructed = json.loads(json.dumps(v1))  # DeepCopy of v1
+
+json_patch(v2_reconstructed, delta)
+
+save_json_file("go1.0.1_reconstructed.json", v2_reconstructed)
