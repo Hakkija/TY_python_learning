@@ -1,0 +1,4 @@
+3273653; shirt; purple; 12.80; good
+4845936; pants; black; 14.10; good
+3436884; blouse; yellow; 24.00; bad
+5937546; shirt; light blue; 6.70; good
