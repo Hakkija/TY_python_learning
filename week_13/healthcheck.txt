@@ -1,0 +1,5 @@
+Anne, 22 years old: your body mass index is 26.3, you should lose weight
+Tiiu, 24 years old: your body mass index is 21.7, you are of normal weight
+Indrek, 53 years old: your body mass index is 24.1, you are of normal weight
+Piret, 69 years old: your body mass index is 18.0, you should gain weight
+Eino, 74 years old: your body mass index is 26.8, you should lose weight
